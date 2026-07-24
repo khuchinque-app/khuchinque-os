@@ -20,6 +20,7 @@ Persistent, episodic, semantic, and procedural memory; vector storage; knowledge
 * [run-llama/llama_index](https://github.com/run-llama/llama_index) — document ingestion, indexing, and retrieval framework (document storage → semantic memory pipeline).
 * [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) — turns a codebase (docs, SQL schemas, configs, PDFs) into a queryable knowledge graph via local deterministic AST parsing, no vector store required; ships as a `/graphify` skill for Claude Code, Cursor, Codex, and Gemini CLI.
 * [psinetron/echoes-vault-opencode](https://github.com/psinetron/echoes-vault-opencode) — persistent memory plugin for OpenCode specifically: an Obsidian-style, plain-Markdown knowledge base (decisions, work logs, project encyclopedia) that survives across sessions.
+* [postgres/postgres](https://github.com/postgres/postgres) — PostgreSQL itself; a relational option for document/structured storage alongside the vector and graph stores above.
 
 ## 2. Execution Layer
 
@@ -40,6 +41,16 @@ The hardware abstraction layer — everything OpenCode reaches out to the world 
 * [browser-use/browser-use](https://github.com/browser-use/browser-use) — browser automation for AI agents, MCP/CLI-friendly.
 * [browserbase/stagehand](https://github.com/browserbase/stagehand) — SDK for browser agents, alternative to browser-use.
 * [dondai1234/master-fetch](https://github.com/dondai1234/master-fetch) — self-hosted MCP web-fetch server with Cloudflare bypass and content extraction; no API keys, no per-request billing.
+* [brave/brave-search-mcp-server](https://github.com/brave/brave-search-mcp-server) — Brave's official web search MCP server: web, image, video, news, and local search.
+* [github/github-mcp-server](https://github.com/github/github-mcp-server) — GitHub's official MCP server: repos, issues, PRs, Actions, code security.
+* [docker/mcp-gateway](https://github.com/docker/mcp-gateway) — Docker's official `docker mcp` CLI plugin/gateway for running and deploying MCP servers as containers.
+* [crystaldba/postgres-mcp](https://github.com/crystaldba/postgres-mcp) — Postgres MCP Pro: configurable read/write database access and performance analysis for agents.
+* [makenotion/notion-mcp-server](https://github.com/makenotion/notion-mcp-server) — Notion's official MCP server.
+* [korotovsky/slack-mcp-server](https://github.com/korotovsky/slack-mcp-server) — full-featured Slack MCP server (no app install or admin approval required; DMs, group DMs, smart history fetch). No single official Slack MCP exists — this is the most capable community one.
+* [sparfenyuk/mcp-telegram](https://github.com/sparfenyuk/mcp-telegram) — Telegram MCP server via MTProto.
+* [domdomegg/google-drive-mcp](https://github.com/domdomegg/google-drive-mcp) — Google Drive MCP server: list, read, upload, organize files.
+* [ArtyMcLabin/Gmail-MCP-Server](https://github.com/ArtyMcLabin/Gmail-MCP-Server) — actively maintained Gmail MCP server with auto authentication (fork of the widely-used but now-unmaintained GongRzhe/Gmail-MCP-Server).
+* [domdomegg/google-cal-mcp](https://github.com/domdomegg/google-cal-mcp) — Google Calendar MCP server: list, create, update, and manage events.
 
 ## 4. Workflow & Orchestration
 
@@ -72,6 +83,7 @@ Everything the user sees: agent visualization, task graph, logs, timeline, token
 * [FlowiseAI/Flowise](https://github.com/FlowiseAI/Flowise) — visual builder/monitor for LLM flows, reference for a drag-and-drop mission-control UI.
 * [grafana/grafana](https://github.com/grafana/grafana) — dashboards for logs/metrics if Mission Control needs a metrics backend rather than a bespoke UI.
 * [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) — collection of `DESIGN.md` files distilled from real brand design systems; drop one in and have the coding agent scaffold a matching Mission Control UI in one shot.
+* [builderz-labs/mission-control](https://github.com/builderz-labs/mission-control) — self-hosted control plane for AI agents: dispatch tasks, review runs, track spend, and operate Claude Code, Codex, and other runtimes from one dashboard. "Mission Control" is a crowded name on GitHub — this is the closest generic, multi-runtime fit rather than one tied to a specific unrelated agent platform.
 
 ## 6. Intelligence Layer
 
