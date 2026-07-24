@@ -40,6 +40,15 @@ The hardware abstraction layer — everything OpenCode reaches out to the world 
 
 The brain that coordinates work: planning, delegation, scheduling, retries, checkpoints, long-running/background jobs.
 
+OpenCode-native plugins (drop-in for this exact stack):
+
+* [ruvnet/ruflo](https://github.com/ruvnet/ruflo) — agent meta-harness for OpenCode/Claude Code/Codex: multi-agent swarms, adaptive/self-learning memory, RAG integration, MCP tools for coordination.
+* [hffmnnj/opencode-goopspec](https://github.com/hffmnnj/opencode-goopspec) — spec-driven development for OpenCode: 5-phase workflow (Discuss → Plan → Execute → Audit → Confirm) with delegation, checkpoints, and verification gates.
+* [spoons-and-mirrors/pocket-universe](https://github.com/spoons-and-mirrors/pocket-universe) — closed-loop async subagents for OpenCode: broadcast messaging, spawn, and recall for coordinating parallel agents without blocking the main thread.
+* [vtemian/micode](https://github.com/vtemian/micode) — OpenCode plugin enforcing a Brainstorm → Plan → Implement workflow, with 12 specialized subagents and session continuity across isolated git worktrees.
+
+General-purpose orchestration (bring your own agent runtime):
+
 * [temporalio/temporal](https://github.com/temporalio/temporal) — durable execution engine for long-running workflows, retries, and checkpoints.
 * [ray-project/ray](https://github.com/ray-project/ray) — distributed compute framework for scaling parallel agents.
 * [langchain-ai/langgraph](https://github.com/langchain-ai/langgraph) — graph-based agent orchestration with state, cycles, and human-in-the-loop.
