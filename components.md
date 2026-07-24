@@ -18,14 +18,18 @@ Persistent, episodic, semantic, and procedural memory; vector storage; knowledge
 * [weaviate/weaviate](https://github.com/weaviate/weaviate) — vector database with hybrid search, alternative to Qdrant.
 * [pgvector/pgvector](https://github.com/pgvector/pgvector) — vector similarity search as a Postgres extension, if you want memory to live in the same PostgreSQL instance as everything else.
 * [run-llama/llama_index](https://github.com/run-llama/llama_index) — document ingestion, indexing, and retrieval framework (document storage → semantic memory pipeline).
+* [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) — turns a codebase (docs, SQL schemas, configs, PDFs) into a queryable knowledge graph via local deterministic AST parsing, no vector store required; ships as a `/graphify` skill for Claude Code, Cursor, Codex, and Gemini CLI.
+* [psinetron/echoes-vault-opencode](https://github.com/psinetron/echoes-vault-opencode) — persistent memory plugin for OpenCode specifically: an Obsidian-style, plain-Markdown knowledge base (decisions, work logs, project encyclopedia) that survives across sessions.
 
 ## 2. Execution Layer
 
-The kernel. This is OpenCode itself, plus the SDKs used to script/extend it.
+The kernel. This is OpenCode itself, plus the SDKs used to script/extend it, and skills that change how the agent behaves.
 
 * [sst/opencode](https://github.com/sst/opencode) — the AI coding agent runtime: terminal execution, file operations, tool execution, multi-model, subagents.
 * [anthropics/claude-agent-sdk-python](https://github.com/anthropics/claude-agent-sdk-python) — Python SDK exposing the Claude agent loop, tools, and context management (what OpenCode itself is built on top of).
 * [anthropics/claude-agent-sdk-typescript](https://github.com/anthropics/claude-agent-sdk-typescript) — TypeScript equivalent, useful if Mission Control or the Intelligence Layer is a Node/TS service driving OpenCode.
+* [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) — coding-agent skill that compresses agent output into minimal-token "caveman" phrasing, cutting ~65% of tokens without losing technical accuracy.
+* [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) — skill that pushes the agent toward the smallest correct diff (YAGNI, stdlib-first) instead of over-building; reports 80–94% less code written on benchmarks.
 
 ## 3. MCP / Tools
 
@@ -35,6 +39,7 @@ The hardware abstraction layer — everything OpenCode reaches out to the world 
 * [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) — official reference MCP servers: filesystem, fetch, git, memory, sequential-thinking, time.
 * [browser-use/browser-use](https://github.com/browser-use/browser-use) — browser automation for AI agents, MCP/CLI-friendly.
 * [browserbase/stagehand](https://github.com/browserbase/stagehand) — SDK for browser agents, alternative to browser-use.
+* [dondai1234/master-fetch](https://github.com/dondai1234/master-fetch) — self-hosted MCP web-fetch server with Cloudflare bypass and content extraction; no API keys, no per-request billing.
 
 ## 4. Workflow & Orchestration
 
@@ -65,6 +70,7 @@ Everything the user sees: agent visualization, task graph, logs, timeline, token
 * [langfuse/langfuse](https://github.com/langfuse/langfuse) — LLM observability: traces, token usage, cost tracking, evals.
 * [FlowiseAI/Flowise](https://github.com/FlowiseAI/Flowise) — visual builder/monitor for LLM flows, reference for a drag-and-drop mission-control UI.
 * [grafana/grafana](https://github.com/grafana/grafana) — dashboards for logs/metrics if Mission Control needs a metrics backend rather than a bespoke UI.
+* [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) — collection of `DESIGN.md` files distilled from real brand design systems; drop one in and have the coding agent scaffold a matching Mission Control UI in one shot.
 
 ## 6. Intelligence Layer
 
