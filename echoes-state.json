@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "pluginVersion": "1.2.2",
+  "initialized": false,
+  "autoSave": {
+    "enabled": true,
+    "lastAutoSave": null
+  },
+  "session": {
+    "started": true,
+    "saved": false,
+    "lastStart": "2026-07-24T19:01:12.210Z",
+    "lastSave": null
+  },
+  "stats": {
+    "totalPages": 0,
+    "totalDailyLogs": 1,
+    "deprecatedPages": 0
+  }
+}
