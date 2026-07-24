@@ -4,97 +4,120 @@
 
 ## APIs & External Services
 
-**Memory/Knowledge:**
-- Mem0 — Vector memory and semantic search via MCP
-  - Integration: MCP remote server at `https://mcp.mem0.ai/mcp`
-  - Auth: Bearer token in `MEM0_API_KEY` env var (configured in `opencode.jsonc`)
-  - Tools: add/search/update/delete memories, list entities/events
-- Membase — Long-term memory/encyclopedia via MCP
-  - Integration: MCP remote server at `https://mcp.membase.so/mcp`
-  - Auth: No auth header (configured in `.vscode/mcp.json`)
-  - Tools: search_memory, search_wiki, add_memory, add_wiki
-- Letta — Local agent memory backend
-  - Integration: Local backend (`lc-local-backend`), agent ID `agent-local-4dbce745...`
-  - Location: `~/.letta/` and `.letta/`
+**AI Agent SDK:**
+- `@anthropic-ai/claude-agent-sdk` ^0.2.84 — Core agent runtime for executing GSD plan sessions (`/home/khuchinque/.opencode/.opencode/sdk/dist/session-runner.js`)
+  - SDK/Client: `@anthropic-ai/claude-agent-sdk` npm package
+  - Usage: `query()` function invoked in `runPlanSession()` and `runPhaseStepSession()`
+  - Model resolution via config `model_profile`: balanced→`claude-sonnet-4-6`, quality→`claude-opus-4-6`, speed→`claude-haiku-4-5` (`/home/khuchinque/.opencode/.opencode/sdk/dist/session-runner.js:22-29`)
 
-**Agent/AI:**
-- Anthropic Claude API — Underlying model for OpenCode and GSD agents
-  - Auth: `ANTHROPIC_API_KEY` env var
-  - SDK: `@anthropic-ai/claude-agent-sdk` v0.2.84
-  - Used by: OpenCode runtime, GSD subagents
+**Skill Registry (External Sources):**
+- GitHub (`JuliusBrussee/caveman`) — Caveman family skills loaded via `skills-lock.json` (`/home/khuchinque/.opencode/skills-lock.json`)
+  - Skills cached locally at `/home/khuchinque/.cache/opencode/packages/@dietrichgebert/ponytail/`
+  - Loading mechanism: opencode skill scanner fetches from GitHub source
 
-**Agent Tools:**
-- Ruflo — Agent swarming and MCP tool server
-  - Integration: MCP local server via `npx ruflo@latest mcp start`
-  - Tools: agent management, memory store, embeddings, coordination, browser
-  - Configured in `opencode.json` under `mcp.ruflo`
+## MCP Servers
+
+**Local MCP:**
+- **ruflo** — Helper-agent MCP server
+  - Type: local subprocess
+  - Command: `npx -y ruflo@latest mcp start`
+  - Enabled: yes
+  - Config: `/home/khuchinque/.opencode/opencode.json:7-18`
+
+**Remote MCP:**
+- **mem0-mcp** — Memory persistence layer
+  - Type: remote HTTP/SSE
+  - URL: `https://mcp.mem0.ai/mcp`
+  - Auth: Bearer token via `MEM0_API_KEY` environment variable (`${MEM0_API_KEY}`)
+  - Enabled: yes
+  - Config: `/home/khuchinque/.opencode/opencode.json:19-26`
+
+**VSCode MCP:**
+- **membase** — Long-term memory via Membase
+  - Type: streamable-http
+  - URL: `https://mcp.membase.so/mcp`
+  - Config: `/home/khuchinque/.opencode/.vscode/mcp.json:3-7`
 
 ## Data Storage
 
-**Knowledge Base:**
-- EchoesVault — Markdown knowledge base (local filesystem)
-  - Location: `EchoesVault/`
-  - Plugin: `echoes-vault-opencode`
-  - Structure: `pages/` (encyclopedia), `daily/` (work logs), `index.md` (master registry)
-  - Commands: `/echoes-init`, `/echoes-start`, `/echoes-end`, `/echoes-status`
+**File System:**
+- **EchoesVault** — Local markdown knowledge base at `/home/khuchinque/.opencode/EchoesVault/`
+  - Daily logs stored in `daily/` directory (e.g., `2026-07-25.md`)
+  - Structured pages in `pages/` directory (e.g., `caveman-skill.md`, `ponytail-skill.md`)
+  - Index maintained at `index.md`
 
-**Knowledge Graph:**
-- Graphify — AST-based knowledge graph from code/docs
-  - Location: `graphify-out/`
-  - Output: `graph.json`, `graph.html`, `GRAPH_REPORT.md`
-  - Command: `/graphify <path>`, `/graphify query`, `/graphify path`, `/graphify explain`
+**Memory/State:**
+- `echoes-state.json` — Plugin state file (`/home/khuchinque/.opencode/echoes-state.json`)
+- `~/.gsd/defaults.json` — User-level GSD config defaults (optional)
+- File-system based state management via GSDTools (`/home/khuchinque/.opencode/.opencode/sdk/dist/gsd-tools.js`)
 
-**Project Planning:**
-- GSD-OpenCode — Project lifecycle framework
-  - Location: `.opencode/get-shit-done/` (v1.38.5)
-  - Source: `rokicool/gsd-opencode` GitHub
-  - Components: 89 commands in `commands/gsd/`, 33 agents in `agents/`, 12 skills, 40+ references, 30+ templates
+**Caching:**
+- `~/.cache/opencode/packages/` — Package/skill cache directory
+- No external caching service (Redis, Memcached, etc.)
 
 ## Authentication & Identity
 
 **Auth Provider:**
-- None (personal development environment — no user auth)
-- MCP servers use bearer tokens where applicable (mem0-mcp)
+- Custom — No external auth provider integrated
+  - Implementation: Bearer token-based for MCP remote servers (mem0-mcp)
+  - Token sourced from environment variables (`MEM0_API_KEY`)
+  - Used in MCP header interpolation: `{env:MEM0_API_KEY}` pattern
 
 ## Monitoring & Observability
 
 **Error Tracking:**
-- None configured
-
-**Analytics:**
-- None
+- None — No Sentry, DataDog, or similar integrated
 
 **Logs:**
-- OpenCode built-in logging (logLevel: INFO)
-- stdout/stderr only
+- opencode internal logging via `logLevel` config (`INFO` level set in `opencode.json`)
+- GSD Logger module: `/home/khuchinque/.opencode/.opencode/sdk/dist/logger.js`
+- No external log aggregation service
 
 ## CI/CD & Deployment
 
 **Hosting:**
-- Not deployed (personal CLI environment on Linux VPS)
+- N/A — Local development environment only; no production deployment
 
 **CI Pipeline:**
-- None configured for this directory
+- None detected — No GitHub Actions, CircleCI, or other CI configs found
+
+**Git Integration:**
+- Git version control with optional branching strategies configured in `.planning/config.json`
+  - Branching: `none` (default), `phase`, or `milestone` strategy
+  - Branch templates: `gsd/phase-{phase}-{slug}`, `gsd/{milestone}-{slug}`
+  - Config in `/home/khuchinque/.opencode/.planning/config.json` and documented in `/home/khuchinque/.opencode/.opencode/get-shit-done/references/planning-config.md`
 
 ## Environment Configuration
 
-**Development:**
-- Required env vars: `MEM0_API_KEY`, `ANTHROPIC_API_KEY`
-- Secrets location: `.env` files, environment variables
-- MCP config: `opencode.json` (main), `opencode.jsonc` (global), `.vscode/mcp.json` (VS Code)
+**Required env vars:**
+- `MEM0_API_KEY` — Bearer token for mem0-mcp MCP server (memory persistence)
 
-**Production:**
-- N/A (personal dev environment)
+**Optional env vars:**
+- `GSD_HOME` — Override home directory for GSD user defaults (`~/.gsd/`)
+- `BRAVE_API_KEY` — Brave web search integration (not currently enabled in config)
+- `FIRECRAWL_API_KEY` — Firecrawl page scraping (not currently enabled in config)
+- `EXA_API_KEY` — Exa semantic search (not currently enabled in config)
+
+**Secrets location:**
+- Environment variables (shell session or shell profile)
+- `.env` file at `/home/khuchinque/.opencode/.opencode/.env` (GSD-OpenCode env config — contains paths, not actual secrets)
+- Bearer token interpolated via `{env:MEM0_API_KEY}` in MCP headers
 
 ## Webhooks & Callbacks
 
 **Incoming:**
-- None
+- None detected
 
 **Outgoing:**
-- None
+- None detected
+
+## Plugins
+
+**OpenCode plugins registered:**
+- `echoes-vault-opencode` — Session memory persistence plugin (echoes system)
+- `@dietrichgebert/ponytail` — YAGNI/lazy coding mode skill plugin
+- Both registered in `/home/khuchinque/.opencode/opencode.json:3-6`
 
 ---
 
 *Integration audit: 2026-07-25*
-*Update when adding/removing external services*
