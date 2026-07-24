@@ -67,6 +67,7 @@ General-purpose orchestration (bring your own agent runtime):
 Everything the user sees: agent visualization, task graph, logs, timeline, token usage, cost tracking.
 
 * [BloopAI/vibe-kanban](https://github.com/BloopAI/vibe-kanban) — kanban board built to orchestrate and monitor coding agents like Claude Code / OpenCode.
+* [psinetron/opencode-visualiser](https://github.com/psinetron/opencode-visualiser) — OpenCode plugin that turns agent terminal logs into a real-time animated 2D pixel-art view of multiple agents working, idling, and reacting.
 * [langfuse/langfuse](https://github.com/langfuse/langfuse) — LLM observability: traces, token usage, cost tracking, evals.
 * [FlowiseAI/Flowise](https://github.com/FlowiseAI/Flowise) — visual builder/monitor for LLM flows, reference for a drag-and-drop mission-control UI.
 * [grafana/grafana](https://github.com/grafana/grafana) — dashboards for logs/metrics if Mission Control needs a metrics backend rather than a bespoke UI.
