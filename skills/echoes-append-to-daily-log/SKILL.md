@@ -22,5 +22,20 @@ In addition to the auto-log rule above, you MUST invoke this tool IMMEDIATELY in
 3. **No File Overwrites:** This tool ONLY appends to the end of today's file.
 4. **Auto-log vs Manual:** Auto-log entries get `[auto]` prefix. Manual entries (from explicit triggers above) have no prefix.
 
+## 📦 ARCHIVAL
+
+Daily logs are archived automatically to bounded context growth.
+
+**Trigger:** When a daily log is 30 days old OR exceeds 100KB uncompressed (whichever comes first).
+
+**Action:**
+1. Compress the log: `gzip EchoesVault/daily/YYYY-MM-DD.md`
+2. Move to archive: `mv EchoesVault/daily/YYYY-MM-DD.md.gz ~/.opencode/EchoesVault/archive/`
+3. Start a fresh daily log for the current date.
+
+**Archive location:** `~/.opencode/EchoesVault/archive/`
+
+Archived logs maintain the original filename and are discoverable via memory search.
+
 ## 📥 PAYLOAD PARAMETERS
 - `logEntry`: (String) The markdown-formatted bullet points to append.
