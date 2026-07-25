@@ -44,9 +44,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Install and verify all missing GSD subagents
-- [ ] 02-02: Set up CI/CD pipeline with workflow validation
-- [ ] 02-03: Write automated tests for critical workflows
+- [ ] 02-01-PLAN.md — Install and verify all missing GSD subagents (Wave 1)
+- [ ] 02-02-PLAN.md — Set up CI/CD pipeline with workflow validation (Wave 2)
+- [ ] 02-03-PLAN.md — Write automated tests for critical workflows (Wave 3)
 
 ### Phase 3: Developer Experience
 **Goal**: CLI interaction is smooth, error messages are helpful, tool integration is seamless
@@ -84,6 +84,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Memory Reliability | 0/3 | Not started | - |
-| 2. Agent Infrastructure | 0/3 | Not started | - |
+| 2. Agent Infrastructure | 0/3 | Planned | - |
 | 3. Developer Experience | 0/2 | Not started | - |
 | 4. Knowledge Management | 0/2 | Not started | - |
