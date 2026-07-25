@@ -1,0 +1,82 @@
+name: Validate GSD Workflows
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  validate-agents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate agent frontmatter (name, description, mode)
+        run: |
+          FAIL=0
+          for f in .opencode/agents/*.md; do
+            [ -f "$f" ] || continue
+            grep -q "^name:" "$f" || { echo "MISSING name: in $f"; FAIL=1; }
+            grep -q "^description:" "$f" || { echo "MISSING description: in $f"; FAIL=1; }
+            grep -q "^mode:" "$f" || { echo "MISSING mode: in $f"; FAIL=1; }
+          done
+          [ "$FAIL" = "0" ] && echo "✓ All agent frontmatter valid" || exit 1
+
+      - name: Validate agent <role> section
+        run: |
+          FAIL=0
+          for f in .opencode/agents/*.md; do
+            [ -f "$f" ] || continue
+            grep -q "<role>" "$f" || { echo "MISSING <role> in $f"; FAIL=1; }
+          done
+          [ "$FAIL" = "0" ] && echo "✓ All agents have <role> section" || exit 1
+
+      - name: Verify agent file count
+        run: |
+          COUNT=$(ls -1 .opencode/agents/*.md 2>/dev/null | wc -l)
+          echo "Found $COUNT agent files"
+          [ "$COUNT" -eq 33 ] || { echo "Expected 33 agents, found $COUNT"; exit 1; }
+
+  validate-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate workflow .md structure
+        run: |
+          FAIL=0
+          for f in .opencode/get-shit-done/workflows/*.md; do
+            [ -f "$f" ] || continue
+            grep -q "<objective>" "$f" || { echo "MISSING <objective> in $f"; FAIL=1; }
+            if ! grep -q "<process>" "$f" && ! grep -q "<step" "$f"; then
+              echo "MISSING <process>/<step> in $f"; FAIL=1;
+            fi
+          done
+          [ "$FAIL" = "0" ] && echo "✓ All workflows have objective + process/step sections" || exit 1
+
+      - name: Validate reference cross-references
+        run: |
+          FAIL=0
+          for f in .opencode/get-shit-done/references/*.md; do
+            [ -f "$f" ] || continue
+            content=$(cat "$f")
+            refs=$(echo "$content" | grep -oP '@\.[^\s)"]+' | head -3)
+            for ref in $refs; do
+              resolved="${ref#@}"
+              [ -f "$resolved" ] || [ -d "$resolved" ] || { echo "UNRESOLVED $ref in $f"; FAIL=1; }
+            done
+          done
+          [ "$FAIL" = "0" ] && echo "✓ All @-refs resolve" || exit 1
+
+      - name: Warn on naming convention violations
+        run: |
+          VIOLS=0
+          for f in .opencode/get-shit-done/workflows/*.md .opencode/get-shit-done/references/*.md; do
+            base=$(basename "$f" .md)
+            if ! echo "$base" | grep -qE '^[a-z0-9][a-z0-9-]*$'; then
+              echo "⚠  Non-kebab-case: $base"
+              VIOLS=$((VIOLS+1))
+            fi
+          done
+          [ "$VIOLS" -eq 0 ] && echo "✓ All filenames kebab-case"
