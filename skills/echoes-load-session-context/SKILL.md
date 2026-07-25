@@ -38,15 +38,30 @@ Want the full context from last session? Or ask me something specific about it.
 ```
 If user accepts, load the full daily log. If user asks a specific question, search memory.
 
-### Autonomous Search Trigger
-During conversation, if the user asks a question where answering requires context from prior sessions, autonomously search memory across all 4 layers (EchoesVault pages, daily logs, Mem0, knowledge graph) and present relevant findings.
+### Autonomous Memory Search Trigger
+During conversation, if the user asks a question where answering requires context from prior sessions, autonomously search memory via the 4-layer unified search skill (`echoes_search_vault_pages`) and present relevant findings. Do NOT wait for the user to explicitly ask you to search.
 
-**When to search:**
-- "What was the auth approach?" → search memory for "auth", "authentication", "login"
-- "How did we handle X?" → search memory for "X"
-- "Remind me about the decision on Y" → search memory for "Y"
+**Trigger condition:** A question or task that references past work, decisions, patterns, or context you haven't seen in the current session.
+
+**Execution:**
+1. Call `echoes_search_vault_pages` with extracted keywords from the user's query.
+2. The skill searches all 4 layers: EchoesVault pages, daily logs, Mem0 vector memory, knowledge graph.
+3. Present relevant findings with source labels and offer to dive deeper.
+
+**When to search (examples):**
+| User says | Extract keywords |
+|-----------|-----------------|
+| "What was the auth approach?" | "auth", "authentication", "login" |
+| "How did we handle X?" | "X" |
+| "Remind me about the decision on Y" | "Y" |
+| "What was the architecture for Z?" | "Z", "architecture" |
+| "Why did we choose W?" | "W" |
+| "Find the discussion about V" | "V", "discussion" |
+| "What's the status of U?" | "U", "status" |
 
 **When NOT to search:**
-- Simple factual questions ("What's 2+2?")
-- Questions about the current conversation
-- General knowledge questions
+- Simple factual questions ("What's 2+2?", "What's the capital of France?")
+- Questions about the current conversation or this session only
+- General knowledge or common sense questions
+- Clarification questions about the user's current request
+- Commands (build, test, deploy requests — unless they reference prior work)
