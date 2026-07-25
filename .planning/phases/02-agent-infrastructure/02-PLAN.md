@@ -103,12 +103,17 @@ Output: verify-agents.cjs script + updated opencode.json with agent key.
   <action>
     Add `agent` key to opencode.json with all 33 GSD subagents.
     
-    Per D-02: verify auto-discovery first, but given 18 agents are flagged as missing, add explicit registration for all 33 agents. Per D-03, this covers all agents — not just the 18 flagged ones.
-    
-    Steps:
-    
-    1. Read opencode.json
-    2. List all agent .md files from `.opencode/.opencode/agents/` — strip `.md` extension to get agent name
+Per D-02: verify auto-discovery first. Steps:
+
+    1. **Verify auto-discovery**: Before modifying opencode.json, check if agents are already discoverable without explicit registration:
+       - Confirm opencode.json has no `agent` key (establishes baseline)
+       - Check if OpenCode auto-discovers agents from `.opencode/agents/` directory
+       - Try spawning a known agent (e.g., `gsd-planner`) to test auto-discovery
+       - If auto-discovery works for some agents, document which ones and register only the remainder
+       - If auto-discovery does not work, proceed with registering all 33
+       - Record the finding in 02-01-SUMMARY.md so future phases know the mechanism
+
+    2. **Add registration**: Read opencode.json. List all agent .md files from `.opencode/.opencode/agents/` — strip `.md` extension to get agent name.
     3. Add `agent` key with each agent name mapped to a minimal config object:
        ```json
        "agent": {
@@ -132,7 +137,7 @@ Output: verify-agents.cjs script + updated opencode.json with agent key.
     ponytail: One model for all agents. If performance profiling later shows specific agents need different models (budget agents vs deep-reasoning agents), that's a separate optimization pass. Registration is the bottleneck, not model tuning.
   </action>
   <verify>
-    <automated>node -e "JSON.parse(require('fs').readFileSync('opencode.json','utf8')).agent.length" &amp;&amp; node .opencode/get-shit-done/scripts/verify-agents.cjs --check-registration</automated>
+    <automated>node -e "const a=JSON.parse(require('fs').readFileSync('opencode.json','utf8')).agent; if(typeof a!=='object'||a===null)process.exit(1);process.exit(Object.keys(a).length===33?0:1)" &amp;&amp; node .opencode/get-shit-done/scripts/verify-agents.cjs --check-registration</automated>
   </verify>
   <done>opencode.json has `agent` key with all 33 agent names. Verification script reports 33 passed, 0 failed. Registration check shows 0 unregistered agents.</done>
 </task>
@@ -609,6 +614,34 @@ function cmdStateComplete(cwd, raw)
   <done>phase.test.cjs and state.test.cjs both pass. Phase tests cover list, find, and error cases. State tests cover extract, load/write round-trip, and atomic modify. All tmpdir fixtures clean up after themselves.</done>
 </task>
 
+<task type="auto">
+  <name>task 4: write integration tests for critical workflow paths</name>
+  <files>.opencode/get-shit-done/bin/test/workflow-integration.test.cjs</files>
+  <action>
+    Create `.opencode/get-shit-done/bin/test/workflow-integration.test.cjs` — integration tests for critical GSD workflow paths. Per D-06 second tier.
+
+    Follow the existing tmpdir fixture pattern from `bin/test/get-profile.test.cjs`:
+    - `beforeEach`: create temp dir, set up `.planning/` dirs with minimal ROADMAP.md and STATE.md
+    - Create `.planning/phases/01-test-phase/` directory structure
+    - Mock `console.log`/`console.error`/`process.exit` using vi.spyOn or direct assignment
+    - `afterEach`: rm -rf temp dir, restore mocks
+
+    Test targets (10-12 tests):
+
+    1. **Phase creation workflow**: Set up minimal ROADMAP.md, call phase creation, verify `.planning/phases/N-name/` created with correct CONTEXT.md.
+    2. **State advance workflow**: Create STATE.md with initial phase, simulate advancing, verify state transitions correctly.
+    3. **Plan creation flow**: Create phase dir + CONTEXT.md, simulate plan creation, verify PLAN.md frontmatter matches.
+    4. **Error handling**: Missing ROADMAP.md → graceful, invalid phase number → graceful, missing CONTEXT.md → graceful.
+    5. **Round-trip integrity**: Create phase → write plans → verify → all files readable and parsable.
+
+    ponytail: 10-12 tests, minimal fixtures per scenario.
+  </action>
+  <verify>
+    <automated>cd .opencode/get-shit-done &amp;&amp; npx vitest run bin/test/workflow-integration.test.cjs 2>&1 | tail -10</automated>
+  </verify>
+  <done>Integration tests pass for phase creation, state advance, plan creation, error handling, and round-trip integrity. All tmpdir fixtures clean up.</done>
+</task>
+
 </tasks>
 
 <threat_model>
@@ -622,7 +655,8 @@ No applicable threats — this plan creates test infrastructure only. All test o
 <verification>
 - `cd .opencode/get-shit-done && npx vitest run --project unit` passes
 - `cd .opencode/get-shit-done && npx vitest run --project existing` passes (regression check)
-- `cd .opencode/get-shit-done && npx vitest run` passes (both projects)
+- `cd .opencode/get-shit-done && npx vitest run bin/test/workflow-integration.test.cjs` passes (integration)
+- `cd .opencode/get-shit-done && npx vitest run` passes (all projects)
 - Each test file has proper tmpdir setup and teardown
 - No existing tests broken by new config
 </verification>
@@ -632,6 +666,7 @@ No applicable threats — this plan creates test infrastructure only. All test o
 - frontmatter.test.cjs: 15+ tests for extractFrontmatter, splitInlineArray, reconstructFrontmatter
 - phase.test.cjs: 10+ tests for cmdPhasesList, cmdPhasesFind
 - state.test.cjs: 10+ tests for stateExtractField, cmdStateLoad, writeStateMd round-trip, readModifyWriteStateMd
+- workflow-integration.test.cjs: 10+ tests for phase creation, state advance, plan creation, error handling, round-trip
 - All tests pass, all temp dirs cleaned up
 </success_criteria>
 

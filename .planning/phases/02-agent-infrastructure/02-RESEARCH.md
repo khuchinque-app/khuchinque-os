@@ -445,20 +445,9 @@ export default defineConfig({
 
 ## Open Questions
 
-1. **How does OpenCode auto-discover agents?**
-   - What we know: `opencode.json` has no `agent` key, yet 15 agents are "confirmed operational." The GSD CLI installer copies agents to the target `agents/` dir and writes `GSD_AGENTS_DIR` in `.env`. OpenCode may scan `GSD_AGENTS_DIR` or hardcoded paths.
-   - What's unclear: Whether D-02's claim of auto-discovery actually works without the `agent` key.
-   - Recommendation: **Plan 02-01 should verify first** — list spawnable agents via OpenCode runtime API or check if a known agent like `gsd-planner` is available. If auto-discovery works, register only the 18. If not, add `agent` entries for all 33.
-
-2. **Which exact 18 agents are "not installed"?**
-   - What we know: STATE.md says 18/33 are "missing" but doesn't list them. Upstream GSD opencode.json registers only 11. The math: 33 total - 11 registered upstream - 4 more somehow discovered = 18 gaps, or 15 working + 18 remaining = 33.
-   - What's unclear: The exact list of 18.
-   - Recommendation: **Determine programmatically.** Compare `config.agent` keys from `opencode.json` against agent names from `agents/` directory. The unregistered ones are the 18 "missing."
-
-3. **Should verification be bash (grep-heavy) or Node.js (frontmatter.cjs)?**
-   - What we know: Both approaches work. Upstream CI uses bash+grep for speed. `frontmatter.cjs` provides more robust parsing (handles quoted values, nested objects, inline arrays).
-   - What's unclear: Whether 2-minute CI budget allows npm install + node invocation for every CI run vs lean bash-only.
-   - Recommendation: **Use bash+grep in CI** (no npm install needed, faster), **use Node.js for local agent verification script** (more thorough, accepts `--check-registration` flag). Both validate the same invariants.
+1. **How does OpenCode auto-discover agents?** [RESOLVED: opencode-schema.json:269-334 defines `agent` key structure. Auto-discovery suspected but unconfirmed — plan 02-01 task 2 verifies before registering. Decision: register all 33 explicitly if auto-discovery fails, otherwise register only the gap.]
+2. **Which exact 18 agents are "not installed"?** [RESOLVED: Determine programmatically by diffing opencode.json.agent keys against agents/ directory filenames. Plan 02-01 includes this check in verify-agents.cjs --check-registration flag.]
+3. **Should verification be bash (grep-heavy) or Node.js (frontmatter.cjs)?** [RESOLVED: Both — bash+grep in CI for speed, Node.js with frontmatter.cjs for local script. CI runs < 2 min without npm install. Local script is more thorough with --check-registration.]
 
 ## Environment Availability
 
