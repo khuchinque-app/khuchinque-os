@@ -25,9 +25,9 @@ echoes_search_vault_pages { query: "<keyword>" }
 ```
 
 ### Layer 2: Daily Logs (Episodic)
-Search `EchoesVault/daily/` directory for matching entries. Read files sorted by date (newest first) and grep for the query term.
+Search `EchoesVault/daily/` directory for matching entries. Use the native Grep tool with `grep -li "<keyword>" EchoesVault/daily/*.md` or read files sorted by date (newest first). Do NOT construct a shell pipeline — use the dedicated tools to avoid injection risk.
 ```
-ls -1t EchoesVault/daily/*.md | while read f; do grep -li "<keyword>" "$f" 2>/dev/null; done
+grep -li "<keyword>" EchoesVault/daily/*.md
 ```
 For each matching file, extract the relevant sections around matches.
 
@@ -54,6 +54,12 @@ graphify query "<keyword>"
    - `[Knowledge Graph]` — from graphify
 4. Present results grouped by layer, most relevant first.
 5. If results are found, offer to read the full content of any result.
+
+## ⚠️ QUERY SAFETY
+1. **No shell execution:** Never pass the query string into a shell pipeline. Use dedicated tools (Grep, Read) only.
+2. **Length limit:** Reject queries longer than 200 characters.
+3. **No metacharacters:** Strip shell metacharacters (`; \` $ () {} [] | &`) from the query before use. Use `printf %q` if shell escaping is unavoidable — but prefer tool-based approaches.
+4. **Empty check:** If the query is empty or whitespace-only, return an error.
 
 ## ⚠️ RULES
 1. **Targeted Queries:** Use specific technical keywords (e.g., "AuthGuard", "esp32 pinout", "database schema") rather than natural language questions for EchoesVault pages and daily logs. For Mem0 and graph, natural language is fine (they support semantic search).

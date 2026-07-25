@@ -54,6 +54,12 @@ Present results grouped by layer:
 - Refine search: "/memory <refined query>"
 ```
 
+## ⚠️ QUERY SAFETY
+1. **Validate before searching:** Reject empty or whitespace-only queries.
+2. **Length limit:** Cap query at 200 characters.
+3. **No shell:** Do not pass the query into any shell pipeline. Use dedicated Grep/Read tools only.
+4. **Metacharacter strip:** Remove `; \` $ () {} [] | &` from the query before passing it to any layer.
+
 ## ⚠️ RULES
 1. If a layer returns no results, omit it from the output.
 2. If a layer is unavailable (Mem0 offline, no graph file), note it as "unavailable".

@@ -29,9 +29,10 @@ Daily logs are archived automatically to bounded context growth.
 **Trigger:** When a daily log is 30 days old OR exceeds 100KB uncompressed (whichever comes first).
 
 **Action:**
-1. Compress the log: `gzip EchoesVault/daily/YYYY-MM-DD.md`
-2. Move to archive: `mv EchoesVault/daily/YYYY-MM-DD.md.gz ~/.opencode/EchoesVault/archive/`
-3. Start a fresh daily log for the current date.
+1. Move the log to archive: `cp EchoesVault/daily/YYYY-MM-DD.md ~/.opencode/EchoesVault/archive/`
+2. Truncate the original in place (safe after copy succeeds).
+3. Compress the archive copy: `gzip ~/.opencode/EchoesVault/archive/YYYY-MM-DD.md`
+4. Start a fresh daily log for the current date.
 
 **Archive location:** `~/.opencode/EchoesVault/archive/`
 

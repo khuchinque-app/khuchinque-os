@@ -65,3 +65,9 @@ During conversation, if the user asks a question where answering requires contex
 - General knowledge or common sense questions
 - Clarification questions about the user's current request
 - Commands (build, test, deploy requests — unless they reference prior work)
+
+**Query safety:**
+1. Queries longer than 200 characters: reject (truncate or return error).
+2. Strip shell metacharacters (`; \` $ () {} [] | &`) from extracted keywords.
+3. Empty keywords: skip search entirely.
+4. Never pass extracted keywords into a shell pipeline — use dedicated tools (Grep, Read, `echoes_search_vault_pages`).
