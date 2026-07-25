@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 2 context gathered
-last_updated: "2026-07-25T00:33:55.789Z"
-last_activity: 2026-07-25 -- Phase 01 execution started
+last_updated: "2026-07-25T00:40:00Z"
+last_activity: 2026-07-25 -- Plan 01-01 verified, SUMMARY committed
 progress:
   total_phases: 4
   completed_phases: 0
@@ -53,6 +53,7 @@ Progress: [█░░░░░░░░░] 10%
 - [Phase 1-4]: Memory-first roadmap — Phase 1 targets automatic cross-session memory; user's #1 priority is "never forget"
 - [Init]: Project identified as brownfield with existing GSD framework but 18/33 agents uninstalled
 - [Phase 2]: All 33 agent files exist on disk — verification needed (structural check, not file presence)
+- [01-01]: Auto-log entries prefixed with [auto], session-start shows summary + deep-dive offer
 
 ### Pending Todos
 
@@ -73,5 +74,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-07-25
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-agent-infrastructure/02-CONTEXT.md
+Stopped at: Completed 01-01-SUMMARY.md
+Resume file: None — ready for plan 01-02
