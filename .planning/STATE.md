@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 01 shipped — PR #1"
-stopped_at: Completed 01-02-SUMMARY.md
-last_updated: "2026-07-25T01:11:56.460Z"
-last_activity: "2026-07-25 — Phase 01 shipped (PR #1)"
+status: "Phase 01 complete, Phase 02 complete, Phase 03 not started"
+stopped_at: Phase 02 — complete
+last_updated: "2026-07-29T00:00:00.000Z"
+last_activity: "2026-07-29 — Phase 2 completed (merged to master, 02-03 executed)"
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 4
-  completed_plans: 5
-  percent: 100
+  total_plans: 10
+  completed_plans: 8
+  percent: 80
 ---
 
 # Project State
@@ -21,30 +21,29 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-25)
 
 **Core value:** Persistent memory that never forgets
-**Current focus:** Phase 01 — memory-reliability
+**Current focus:** Phase 03 — developer experience
 
 ## Current Position
 
-Phase: 01 (memory-reliability) — COMPLETE
-Plan: 3 of 3 completed (all plans done)
-Status: Phase 01 shipped — PR #1
-Last activity: 2026-07-25 — Phase 01 shipped (PR #1)
+Phase: 02 (agent-infrastructure) — COMPLETE ✓
+Plan: 02-01 ✅, 02-02 ✅, 02-03 ✅
+Status: Phase 2 complete — all 3 plans executed, merged to master
+Last activity: 2026-07-29 — Phase 2 completed
 
-Progress: [███░░░░░░░] 25%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 2
-- Average duration: N/A
-- Total execution time: N/A
+- Total plans completed: 8 (3 from Phase 1 + 3 from Phase 2 + 2 carryover)
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-memory-reliability | 3/3 | Complete | — |
+| 02-agent-infrastructure | 3/3 | Complete | — |
 
 ## Accumulated Context
 
@@ -57,14 +56,16 @@ Progress: [███░░░░░░░] 25%
 - [01-02]: Memory search uses 4-layer unified approach with source labels
 - [01-02]: Search skill degrades gracefully when layers unavailable
 - [01-02]: Agent searches autonomously when questions reference past work (trigger tables define when/not)
+- [02-01]: Registered all 33 agents explicitly in opencode.json (auto-discovery unconfirmed)
+- [02-02]: CI/CD uses bash+grep for speed (< 2 min), no npm install needed
+- [02-03]: Tests use node:test (built-in) — no package.json/vitest dependency
 
 ### Pending Todos
 
-None yet.
+- Start Phase 3 (Developer Experience)
 
 ### Blockers/Concerns
 
-- 18 GSD subagents flagged as missing — investigation found all 33 agent files exist on disk. Root cause may be registration (opencode.json) rather than file absence. Plan 02-01 will resolve.
 - Echoes vault session never started (Initialized=true, Session=false)
 - External MCP services (Mem0, Membase) required for full memory stack
 
@@ -76,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-25
-Stopped at: Completed 01-02-SUMMARY.md
-Resume file: None — ready for plan 01-03 (if any remaining) or Phase 2
+Last session: 2026-07-29
+Stopped at: Phase 02 complete — ready for Phase 03
+Resume file: None

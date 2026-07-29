@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-07-29T01:09:18.183Z",
+  "projectRoot": "/home/khuchinque/.opencode/khuchinque-os",
+  "structure": {
+    "hasPackageJson": false,
+    "hasTsConfig": false,
+    "hasClaudeConfig": true,
+    "hasClaudeFlow": true
+  },
+  "scannedAt": 1785287358183
+}

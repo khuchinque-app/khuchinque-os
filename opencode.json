@@ -5,6 +5,14 @@
     "@dietrichgebert/ponytail"
   ],
   "mcp": {
+    "cua-driver": {
+      "type": "local",
+      "command": [
+        "cua-driver",
+        "mcp"
+      ],
+      "enabled": true
+    },
     "ruflo": {
       "type": "local",
       "command": [
@@ -23,12 +31,27 @@
       "headers": {
         "Authorization": "Bearer ${MEM0_API_KEY}"
       }
+    },
+    "membase": {
+      "type": "remote",
+      "url": "https://mcp.membase.so/mcp",
+      "enabled": true
+    },
+    "gsd": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "-p",
+        "@opengsd/gsd-core",
+        "gsd-mcp-server"
+      ],
+      "enabled": true
     }
   },
   "skills": {
     "paths": [
-      "~/.opencode/.agents/skills",
-      "~/.opencode/skills"
+      "/home/khuchinque/.opencode/khuchinque-os/skills"
     ]
   },
   "references": {
@@ -115,6 +138,9 @@
       "model": "bailian-coding-plan/qwen3-coder-plus"
     },
     "gsd-intel-updater": {
+      "model": "bailian-coding-plan/qwen3-coder-plus"
+    },
+    "gsd-mempalace-curator": {
       "model": "bailian-coding-plan/qwen3-coder-plus"
     },
     "gsd-nyquist-auditor": {

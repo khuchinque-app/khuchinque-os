@@ -10,7 +10,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..', '..');
-const AGENTS_DIR = path.join(ROOT, '.opencode', 'agents');
+const LOCAL_AGENTS_DIR = path.join(ROOT, '.opencode', 'agents');
+const GLOBAL_AGENTS_DIR = path.join(require('os').homedir(), '.opencode', 'agents');
+const AGENTS_DIR = fs.existsSync(LOCAL_AGENTS_DIR) ? LOCAL_AGENTS_DIR : GLOBAL_AGENTS_DIR;
 const OPENCODE_JSON = path.join(ROOT, 'opencode.json');
 
 const agentFiles = fs.readdirSync(AGENTS_DIR)
@@ -74,7 +76,7 @@ if (process.argv.includes('--check-registration')) {
     .filter(name => !registered.includes(name));
 
   if (unregistered.length === 0) {
-    console.log('Registration check: All 33 agents registered in opencode.json');
+    console.log(`Registration check: All ${agentFiles.length} agents registered in opencode.json`);
   } else {
     console.log(`Registration check: ${unregistered.length} agents NOT registered in opencode.json:`);
     for (const name of unregistered) console.log(`  - ${name}`);
